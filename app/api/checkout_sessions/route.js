@@ -7,6 +7,7 @@ const formatAmountForStripe =( amount) => {
     return Math.round(amount * 100);  
 }
 export async function POST(req) {
+    
     const params = {
         payment_method_types: ['card'],
         line_items: [
