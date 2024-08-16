@@ -3,32 +3,64 @@ import Image from "next/image";
 import getStripe from "@/utils/get-stripe";
 import Head from "next/head"; // Correctly import Head from next/head
 import { SignedIn,SignedOut,UserButton } from "@clerk/nextjs";
-import {Box, AppBar, Button, Container, Toolbar, Typography, Grid } from "@mui/material";
-import { useRef } from "react";
+import {Box, AppBar, Button, Container, Toolbar, Typography, Grid,Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle } from "@mui/material";
+import { useRef, useState} from "react";
 
 export default function Home() {
 
-  const handleSubmit = async () => {
-    const checkoutSession = await fetch("/api/checkout_session", {
-      method: "POST",
-      headers: {
-        origin: 'http://localhost:3001',
-      },
-    })
-    const checkout_session = await checkoutSession.json();
+  const [openFreeDialog, setOpenFreeDialog] = useState(false);
 
-    if (checkoutSession.statusCode === 500) {
-      console.error(checkout_session.message);
-      return;
-    }
+  // const handleSubmit = async () => {
+  //   const checkoutSession = await fetch("/api/checkout_session", {
+  //     method: "POST",
+  //     headers: {
+  //       origin: 'http://localhost:3000',
+  //     },
+  //   })
+  //   const checkout_session = await checkoutSession.json();
 
-    const stripe = await getStripe();
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: checkout_session.id,
-    });
+  //   if (checkoutSession.statusCode === 500) {
+  //     console.error(checkout_session.message);
+  //     return;
+  //   }
 
-    if (error) {
-      console.warn(error.message);  
+  //   const stripe = await getStripe();
+  //   const { error } = await stripe.redirectToCheckout({
+  //     sessionId: checkout_session.id,
+  //   });
+
+  //   if (error) {
+  //     console.warn(error.message);  
+  //   }
+  // }
+  const handleSubmit = async (plan) => {
+    try {
+      const checkoutSession = await fetch("/api/checkout_session", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ plan }) // Ensure you send the plan to the backend
+      });
+  
+      if (!checkoutSession.ok) {
+        const errorData = await checkoutSession.json();
+        console.error('Checkout session error:', errorData.message);
+        return;
+      }
+  
+      const checkout_session = await checkoutSession.json();
+      const stripe = await getStripe();
+  
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: checkout_session.id,
+      });
+  
+      if (error) {
+        console.warn('Stripe redirect error:', error.message);
+      }
+    } catch (error) {
+      console.error('Error during checkout:', error);
     }
   }
   const featuresRef = useRef(null);
@@ -37,6 +69,22 @@ export default function Home() {
       if (featuresRef.current) {
           featuresRef.current.scrollIntoView({ behavior: "smooth" });
       }
+  };
+
+
+
+  const handleFreeClick = () => {
+    setOpenFreeDialog(true);
+  };
+
+  const handleCloseFreeDialog = () => {
+    setOpenFreeDialog(false);
+  };
+
+  const handleContinue = () => {
+    setOpenFreeDialog(false);
+    // Redirect to the generate page
+    window.location.href = "/generate"; // Update the path as needed
   };
 
 
@@ -114,43 +162,54 @@ export default function Home() {
         </Box>
          <Box sx={{my:6, textAlign:'center'}}>
          <Typography variant="h4" align="center" gutterBottom>Pricing</Typography>
-          <Grid container spacing={4}> 
-            <Grid item xs={12} md={6}>
-              <Box sx={{p:3, 
-                border: '1px solid ',
-                borderColor: 'grey.300',
-                borderRadius: 2,
-
-               }}>
-              <Typography variant="h5" gutterBottom>Basic</Typography>
-              <Typography variant="h6" gutterBottom>$5 / month</Typography>
-              <Typography>
-                {' '}
-               Create up to 100 flashcards per month. Limited storage.
-              </Typography>
-              <Button variant="contained" color="primary" sx={{mt:2}} onClick={handleSubmit}>Choose Basic</Button>
+         <Grid container spacing={4}> 
+            <Grid item xs={12} md={4}>
+              <Box sx={{ p:3, border: '1px solid', borderColor: 'white', borderRadius: 4 }}>
+                <Typography variant="h5" gutterBottom>Free</Typography>
+                <Typography variant="h6" gutterBottom>$0 / month</Typography>
+                <Typography>Create up to 3 flashcards per month.</Typography>
+               <Button variant="contained" color="primary" sx={{ mt:2 }} onClick={handleFreeClick}>Choose Free</Button>
               </Box>
-          </Grid>
-        
-          
-            <Grid item xs={12} md={6}>
-            <Box sx={{p:3, 
-                border: '1px solid ',
-                borderColor: 'grey.300',
-                borderRadius: 2,
-               }}>
-              <Typography variant="h5" gutterBottom>Pro</Typography>
-              <Typography variant="h6" gutterBottom>$6 / month</Typography>
-              <Typography>
-                {' '}
-                Unlimited flashcards and storage. Priority support.
-              </Typography>
-              <Button variant="contained" color="primary" sx={{mt:2}} onClick={handleSubmit}> Choose Pro</Button>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Box sx={{ p:3, border: '1px solid', borderColor: 'white', borderRadius: 4 }}>
+                <Typography variant="h5" gutterBottom>Basic</Typography>
+                <Typography variant="h6" gutterBottom>$5 / month</Typography>
+                <Typography>Create up to 100 flashcards per month. Limited storage.</Typography>
+                <Button variant="contained" color="primary" sx={{ mt:2 }} onClick={() => handleSubmit('basic')}>Choose Basic</Button>
               </Box>
-              </Grid>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Box sx={{ p:3, border: '1px solid', borderColor: "white", borderRadius: 4 }}>
+                <Typography variant="h5" gutterBottom>Pro</Typography>
+                <Typography variant="h6" gutterBottom>$10 / month</Typography>
+                <Typography>Unlimited flashcards and storage. Priority support.</Typography>
+                <Button variant="contained" color="primary" sx={{ mt:2 }} onClick={() => handleSubmit('pro')}>Choose Pro</Button>
+              </Box>
+            </Grid>
           </Grid>
         </Box>
         </section>
+        {/* Dialog for Free Plan */}
+      <Dialog
+        open={openFreeDialog}
+        onClose={handleCloseFreeDialog}
+        aria-labelledby="free-plan-dialog-title"
+        aria-describedby="free-plan-dialog-description"
+      >
+        <DialogTitle id="free-plan-dialog-title">Free Plan</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="free-plan-dialog-description">
+            You have selected the Free Plan. You can generate up to 3 flashcards per month. Enjoy using our app for free!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseFreeDialog} color="primary">Cancel</Button>
+          <Button onClick={handleContinue} color="primary" autoFocus>
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
   </Container>
   );
 }
