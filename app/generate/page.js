@@ -3,7 +3,8 @@ import { useUser } from "@clerk/nextjs"
 import { AppBar, Container, Grid,Button, Box,Card, Typography, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, CardActionArea, CardContent} from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { collection, doc, writeBatch } from "firebase/firestore";
+import { collection, doc, writeBatch,getDoc } from "firebase/firestore";
+import { db } from "@/firebase";
 
 
 export default function Generate(){
@@ -58,7 +59,7 @@ export default function Generate(){
                alert("You already have a set of flashcards with that name")
                return;
            }else {
-            collection.push({
+            collections.push({
                 name
             }) 
             batch.set(userDocRef, {flashcards: collections}, {merge: true})
