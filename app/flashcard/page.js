@@ -49,8 +49,8 @@ return (
                     Flashcard Saas
                 </Typography>
                 <Button color="inherit">
-                    <Link href="/" passHref>
-                        Log Out
+                    <Link href="./flashcards" passHref>
+                        Back
                     </Link>
                 </Button>
                 
@@ -62,8 +62,8 @@ return (
                         <Grid item xs={12} sm={6} md={4} key={index} >
                             <Card>
                                 <CardActionArea
-                                onClick={()=>{handleCardClick(flashcard.name)}}>
-                                    <CardContent>
+                                onClick={()=>{handleCardClick(index)}}>
+                                    <CardContent overflow='auto'>
                                         <Box 
                                         sx={{
                                             perspective: '1000px',
@@ -78,6 +78,8 @@ return (
                                                 boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
                                                 borderRadius: '8px',
                                                 display: 'flex',
+                                                
+                                                
                                              },
                                              '& > div > div': {
                                                 backfaceVisibility: 'hidden',
@@ -89,22 +91,22 @@ return (
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                padding: 2,
+                                                padding: 5,
                                                 boxSizing: 'border-box',
+                                             
                                              },
                                              '& > div > div:nth-child(2)': { 
                                                 transform: 'rotateY(180deg)',
                                                 backgroundColor: '#f5f5f5',
                                                 color: 'black',
                                                 padding: '20px',
-                                                overflowY: 'auto',
-                                                overflowY: 'auto',
-                                                fontSize: '0.9rem',
+                                                overflow: 'auto',
+                                                fontSize: '0.5rem',
                                              },
                                             }}>
                                             <div>
                                                 <div>
-                                                <Typography variant="subtitle1" component="div" sx={{ fontWeight: 'bold', textAlign: 'center', marginBottom: '8px' }}>
+                                                <Typography variant="subtitle1" component="div" sx={{ fontWeight: 'bold', textAlign: 'center', marginBottom: '8px', marginTop:'8px' }}>
                                                 {flashcard.topic}
                                                 </Typography>
                                                      <Typography variant="h6" component='div'>
@@ -112,7 +114,7 @@ return (
                                                      </Typography>
                                                 </div>
                                                 <div>
-                                                     <Typography variant="body1" component='div'>
+                                                     <Typography variant="body2" component='div' overflow={'auto'}>
                                                             {flashcard.back}
                                                      </Typography>
                                                 </div>

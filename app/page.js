@@ -4,11 +4,46 @@ import getStripe from "@/utils/get-stripe";
 import Head from "next/head"; // Correctly import Head from next/head
 import { SignedIn,SignedOut,UserButton } from "@clerk/nextjs";
 import {Box, AppBar, Button, Container, Toolbar, Typography, Grid } from "@mui/material";
+import { useRef } from "react";
+
 export default function Home() {
+
+  const handleSubmit = async () => {
+    const checkoutSession = await fetch("/api/checkout_session", {
+      method: "POST",
+      headers: {
+        origin: 'http://localhost:3001',
+      },
+    })
+    const checkout_session = await checkoutSession.json();
+
+    if (checkoutSession.statusCode === 500) {
+      console.error(checkout_session.message);
+      return;
+    }
+
+    const stripe = await getStripe();
+    const { error } = await stripe.redirectToCheckout({
+      sessionId: checkout_session.id,
+    });
+
+    if (error) {
+      console.warn(error.message);  
+    }
+  }
+  const featuresRef = useRef(null);
+
+  const scrollToFeatures = () => {
+      if (featuresRef.current) {
+          featuresRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+  };
+
+
 
   return (
 
-    <Container maxWidth='lg'>
+    <Container maxWidth='100%'>
       <Head>
         <title>Flashcard Creator</title>
         <meta name="description" content="create flashcard from your text" />
@@ -17,7 +52,7 @@ export default function Home() {
       <AppBar position="static">
         <Toolbar>
           
-          <Typography variant="h6"  sx={{ flexGrow: 1 }}>
+          <Typography variant="h5"  sx={{ flexGrow: 1 }}>
             Flashcard Saas
           </Typography>
           <SignedOut>
@@ -35,17 +70,18 @@ export default function Home() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '80vh'
+            height: '90vh'
           }
         }>
           <Typography variant="h2" gutterBottom>Welcome to Flashcard Saas</Typography>
           <Typography variant="h5" gutterBottom>
             {' '}
             The easiest way to make flashcards from text</Typography>
-            <Button variant="contained" color="primary" sx={{mt:2}}>Get Started</Button>
+            <Button component='a' variant="contained" color="primary" sx={{mt:2}} onClick={scrollToFeatures}>Get Started</Button>
         </Box>
-        <Box sx={{my:6, alignContent:'center'}} >
-          <Typography variant="h4" align="center" gutterBottom>Features </Typography>
+        <section id="features" ref={featuresRef}>
+        <Box sx={{my:20, alignContent:'center'}} maxHeight={'80vh'} >
+          <Typography variant="h3" align="center" mb={15}>Features </Typography>
           
           <Grid container spacing={4}> 
             <Grid item xs={12} md={4}>
@@ -92,7 +128,7 @@ export default function Home() {
                 {' '}
                Create up to 100 flashcards per month. Limited storage.
               </Typography>
-              <Button variant="contained" color="primary" sx={{mt:2}}>Choose Basic</Button>
+              <Button variant="contained" color="primary" sx={{mt:2}} onClick={handleSubmit}>Choose Basic</Button>
               </Box>
           </Grid>
         
@@ -109,11 +145,12 @@ export default function Home() {
                 {' '}
                 Unlimited flashcards and storage. Priority support.
               </Typography>
-              <Button variant="contained" color="primary" sx={{mt:2}}> Choose Pro</Button>
+              <Button variant="contained" color="primary" sx={{mt:2}} onClick={handleSubmit}> Choose Pro</Button>
               </Box>
               </Grid>
           </Grid>
         </Box>
+        </section>
   </Container>
   );
 }

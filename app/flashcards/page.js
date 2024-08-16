@@ -1,5 +1,5 @@
 'use client'
-import { useUser } from "@clerk/nextjs"
+import { SignOutButton, useUser,useClerk} from "@clerk/nextjs"
 import { AppBar, Container, Toolbar,Button, Typography, Grid,Card,CardActionArea,CardContent } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -7,12 +7,15 @@ import { use,useState,useEffect } from "react";
 import { collection, doc, writeBatch,getDoc,setDoc,CollectionReference} from "firebase/firestore";
 import { db } from "@/firebase";
 
+
+
 export default function Flashcards(){
+
     const {isLoaded,isSignedIn,user} = useUser()
     const [flashcards,setFlashcards] = useState([])
     const router = useRouter()
-
-
+    const clerk = useClerk();  // Access Clerk client
+    
     useEffect(()=>{
         async function getFlashcards(){
             if (!user) return;
@@ -36,25 +39,29 @@ export default function Flashcards(){
         router.push(`/flashcard?id=${id}`)
     }
 
-
+    const handleLogout = async () => {
+       
+        await clerk.signOut();  // Sign out using Clerk
+        router.push('/');  // Redirect to sign-in page after logout
+    };
 
     return (
         <Container maxWidth='100vw' >
-            <AppBar position="static" sx={{backgroundColor: '#3f51b5'}} >
-                <Toolbar>
-                    <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                        Flashcard Saas
-                    </Typography>
-                    <Button color="inherit">
-                        <Link href="/sign-in" passHref>
-                            Login
-                        </Link>
+            <AppBar position="static"  sx={{backgroundColor: '#3f51b5'}} >
+                <Toolbar >
+                <Link href="/" passHref>
+                    <Button sx={{ textTransform: 'none' }}>
+                        <Typography variant="h6" sx={{ flexGrow: 1, color: 'white' }}>
+                            Flashcard Saas
+                        </Typography>
                     </Button>
-                    <Button color="inherit">
-                        <Link href="/sign-up" passHref>
-                            Sign Up
-                        </Link>
-                    </Button>
+                </Link>
+        <Button color="inherit" onClick={handleLogout}  sx={{ marginLeft: 'auto' }}  >
+            Logout
+        </Button>
+
+
+     
                 </Toolbar>
             </AppBar>
             <Grid container spacing={3} sx={{mt:4}}>
