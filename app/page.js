@@ -34,10 +34,10 @@ const features = [
 
 function FeaturesSection() {
   return (
-    
     <Box sx={{ 
       my: 6, 
       py: 6,
+      px: 4,
       backgroundColor: 'background.default',
       color: 'black'
     }}>
@@ -93,10 +93,8 @@ export default function Home() {
       console.error('Error during checkout:', error);
     }
   }
-
   const featuresRef = useRef(null);
 
-  
   const scrollToFeatures = () => {
       if (featuresRef.current) {
           featuresRef.current.scrollIntoView({ behavior: "smooth" });
@@ -116,14 +114,14 @@ export default function Home() {
   const handleContinue = () => {
     setOpenFreeDialog(false);
     // Redirect to the generate page
-    window.location.href = "/generate"; // Redirect to the generate page
+    window.location.href = "/generate"; // Update the path as needed
   };
 
 
 
   return (
       <ThemeProvider theme={theme}>
-       <Box sx={{ color :'white',display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+        <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'White' }}>
           <Head>
             <title>Flashcard Creator</title>
             <meta name="description" content="create flashcard from your text" />
@@ -152,6 +150,7 @@ export default function Home() {
           height: '80vh',
           position: 'relative',
           overflow: 'hidden',
+          width: '100',
         }}>
           <Box sx={{
             display: 'flex',
@@ -159,9 +158,11 @@ export default function Home() {
             width: '50%',
             zIndex: 1,
             pl: 4, // Add some padding to the left
+            pr: 2, // Add some padding to the right
+            maxWidth: '600px', // Limit the maximum width
           }}>
-            <Typography variant="h2" gutterBottom color={'black'}>Welcome to MemoGenie</Typography>
-            <Typography variant="h6" gutterBottom color={'black'}>
+            <Typography variant="h2" gutterBottom>Welcome to MemoGenie</Typography>
+            <Typography variant="h6" gutterBottom>
             MemoGenie is your AI-powered companion, turning any topic into personalized flashcards, making mastery effortless and engaging.
             </Typography>
             <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
@@ -171,9 +172,9 @@ export default function Home() {
 
         <Box sx={{
             position: 'absolute',
-            right: -50, // Shift the image slightly off-screen to the right
+            right: 0, // Shift the image slightly off-screen to the right
             top: 0,
-            width: '60%',
+            width: '50%',
             height: '100%',
             zIndex: 0,
           }}>
@@ -189,8 +190,7 @@ export default function Home() {
         <FeaturesSection />
 
 {/* Pricing Section */}
-<section id="featuresRef" ref={featuresRef} >
-<Box sx={{ my: 6, textAlign: 'center', backgroundColor: 'purple', py: 6}}>
+<Box sx={{ my: 6, textAlign: 'center', backgroundColor: 'purple', py: 6, px: 4}}>
           <Typography variant="h4" align="center" gutterBottom sx={{ color: 'white' }}>
             Choose Your Plan
           </Typography>
@@ -286,7 +286,6 @@ export default function Home() {
             ))}
           </Grid>
         </Box>
-        </section>
 
 
 
