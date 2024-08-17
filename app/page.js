@@ -214,8 +214,8 @@ export default function Home() {
               {
                 title: "Basic",
                 subtitle: "Unlock more features",
-                price: "$0.49",
-                period: "/year",
+                price: "$5",
+                period: "/month",
                 features: [
                   "Unlimited flashcards",
                   "Detailed progress tracking",
@@ -227,8 +227,8 @@ export default function Home() {
               {
                 title: "Pro",
                 subtitle: "Unlock maximum features",
-                price: "$0.99",
-                period: "/year",
+                price: "$10",
+                period: "/month",
                 features: [
                   "Create unlimited flashcards",
                   "High quality AI-generated flashcards",
