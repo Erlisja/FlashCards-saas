@@ -62,29 +62,6 @@ export default function Home() {
 
   const [openFreeDialog, setOpenFreeDialog] = useState(false);
 
-  // const handleSubmit = async () => {
-  //   const checkoutSession = await fetch("/api/checkout_session", {
-  //     method: "POST",
-  //     headers: {
-  //       origin: 'http://localhost:3000',
-  //     },
-  //   })
-  //   const checkout_session = await checkoutSession.json();
-
-  //   if (checkoutSession.statusCode === 500) {
-  //     console.error(checkout_session.message);
-  //     return;
-  //   }
-
-  //   const stripe = await getStripe();
-  //   const { error } = await stripe.redirectToCheckout({
-  //     sessionId: checkout_session.id,
-  //   });
-
-  //   if (error) {
-  //     console.warn(error.message);  
-  //   }
-  // }
   const handleSubmit = async (plan) => {
     try {
       const checkoutSession = await fetch("/api/checkout_session", {
@@ -115,8 +92,10 @@ export default function Home() {
       console.error('Error during checkout:', error);
     }
   }
+
   const featuresRef = useRef(null);
 
+  
   const scrollToFeatures = () => {
       if (featuresRef.current) {
           featuresRef.current.scrollIntoView({ behavior: "smooth" });

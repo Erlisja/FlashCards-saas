@@ -1,13 +1,14 @@
 'use client'
 import { useUser } from "@clerk/nextjs"
-import { AppBar, Container, Grid,Button, Box,Card, Typography, Toolbar, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, CardActionArea, CardContent} from "@mui/material";
-import { useState } from "react";
+import { AppBar, Container, Grid,Button, Box,Card,Toolbar,Typography, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, CardActionArea, CardContent} from "@mui/material";
+import { useState, useRef} from "react";
 import { useRouter } from "next/navigation";
 import { collection, doc, writeBatch,getDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import Link from "next/link";
+import { Timer } from "@mui/icons-material";
 
-
+// Main component for generating flashcards
 export default function Generate(){
     const {isLoaded,isSignedIn,user} = useUser()
     const [flashcards, setFlashcards] = useState([])
@@ -15,21 +16,44 @@ export default function Generate(){
     const [text, setText] = useState("")
     const[name, setName] = useState("")
     const[open, setOpen] = useState(false)
+    const [limitReached, setLimitReached] = useState(false);
+    const [generationCount, setGenerationCount] = useState(0); // Add this state
+
     const router = useRouter()
 
+     // Function to check the number of flashcards
+     const checkFlashcardLimit = async () => {
+        const userDocRef = doc(collection(db, 'users'), user.id);
+        const colRef = collection(userDocRef, name);
+        const snapshot = await getDoc(colRef);
+        return snapshot.size;
+    };
+
+    const handleSubscriptionClose = () => {
+        setLimitReached(false); // Close the subscription popup
+    };
+
+
+    // Function to handle form submission for generating flashcards
     const handleSubmit = async()=>{
-        fetch ('api/generate', {
-            method: 'POST',
-            body: text,
+        
+        if (generationCount >= 3) {
+            setLimitReached(true); // Show the popup if limit reached
+            return;
+        }
+        fetch ('api/generate', { 
+            method: 'POST',         // HTTP method
+            body: text,             // Request body containing the input text
           
         })
-        .then((res) => res.json())
+        .then((res) => res.json())  // Parse the response as JSON
         .then((data) => 
-            setFlashcards(data))
+            setFlashcards(data)) // Update the flashcards state with the response data
+        setGenerationCount(prevCount => prevCount + 1);   
             
         }
           
-
+    // Function to handle the click event on a flashcard
     const handleCardClick = (id)=>{
         setFlipped((prev) => ({
             ...prev,
@@ -44,6 +68,11 @@ export default function Generate(){
         setOpen(false);
     }
 
+    const handleRedirectToSubscription = () => {
+        router.push('/#features');
+    };
+
+    // Function to save the flashcards to the database
     const saveFlashcards = async()=>{
         if (!name){
             alert("Please enter a name for the flashcards")
@@ -53,6 +82,8 @@ export default function Generate(){
         const batch = writeBatch(db);
         const userDocRef = doc(collection(db, 'users'), user.id);
         const docSnap = await getDoc(userDocRef);
+
+        let flashcardCount = 0;
 
         if (docSnap.exists()){
            const collections = docSnap.data().flashcards;
@@ -73,6 +104,7 @@ export default function Generate(){
     flashcards.forEach((flashcard)=>{
         const cardDocRef = doc(colref);
         batch.set(cardDocRef, flashcard)
+        flashcardCount += 1;
     })
     await batch.commit();
     handleClose();
@@ -112,6 +144,7 @@ export default function Generate(){
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
+            
             }}>
             <Typography variant="h4">Generate Flashcards</Typography>
             <Paper color='black' sx={{ p: 4, width: '100%', mt: 6 }}>
@@ -216,15 +249,41 @@ export default function Generate(){
                     onChange={(e) => setName(e.target.value)}
                     fullWidth
                     variant="outlined"
-                    label="Flashcard Name" />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={saveFlashcards} color="primary">Save</Button>
-            </DialogActions>
-        </Dialog>
-    </Container>
-    </Box>
-</>
-);
+                    label="Flashcard Name"/>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={saveFlashcards} color="primary">Save</Button>
+                </DialogActions>
+            </Dialog>
+             {/* Subscription popup dialog */}
+             <Dialog open={limitReached} onClose={handleSubscriptionClose}>
+                <DialogTitle sx={{ textAlign: 'center', fontSize: '1.5rem' }}>Subscription Required</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        <Typography variant="h6" sx={{ mb: 2 }}>
+                            You've reached the limit of free flashcard generations.
+                        </Typography>
+                        <Typography variant="body1" sx={{ mb: 2 }}>
+                            To continue generating flashcards, please choose one of our subscription plans:
+                        </Typography>
+                        <ul>
+                            <li><Typography variant="body2">Basic Plan: $5/month - Up to 100 flashcards/month, limited storage</Typography></li>
+                            <li><Typography variant="body2">Pro Plan: $10/month - Unlimited flashcards and storage, priority support</Typography></li>
+                        </ul>
+                        <Typography variant="body1">
+                            Click below to view and select a subscription plan.
+                        </Typography>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleSubscriptionClose}>Close</Button>
+                    <Button onClick={handleRedirectToSubscription} color="primary">View Subscriptions</Button>
+                </DialogActions>
+            </Dialog>
+         </Container>
+    )
 }
+
+
+
