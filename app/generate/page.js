@@ -128,12 +128,12 @@ export default function Generate(){
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
                 MemoGenie
             </Typography>
-            <Button variant='outlined'  color='inherit' spacing='20px' onClick={handleHome}>
+            <Button  color='inherit' spacing='20px' onClick={handleHome}>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', fontSize:'1rem'}}>
                     Home
                 </Typography>
             </Button>
-            <Button variant="outlined" color='inherit'  onClick={handleCollections}>
+            <Button color='inherit'  onClick={handleCollections}>
                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', fontSize:'1rem'}}>
                     Collections
                 </Typography>
