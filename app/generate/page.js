@@ -110,28 +110,33 @@ export default function Generate(){
     handleClose();
     router.push('/flashcards');  
     }
+
+    //home button
+    const handleHome = () => {
+        router.push('./');
+    };
+    //collections button
+    const handleCollections = () => {
+        router.push('./flashcards');
+    };
+
     return (
-    <>
+        <Container maxWidth='md' sx={{ pt: 8 }}>
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'White' }}>
     <AppBar position="fixed" sx={{ backgroundColor: 'purple', width: '100%' }}>
         <Toolbar>
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
                 MemoGenie
             </Typography>
-            <Button color="inherit">
-                <Link href="/" passHref>
+            <Button variant='outlined'  color='inherit' spacing='20px' onClick={handleHome}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', fontSize:'1rem'}}>
                     Home
-                </Link>
+                </Typography>
             </Button>
-            <Button color="inherit">
-                <Link href="/sign-in" passHref>
-                    Login
-                </Link>
-            </Button>
-            <Button color="inherit">
-                <Link href="/sign-up" passHref>
-                    Sign Up
-                </Link>
+            <Button variant="outlined" color='inherit'  onClick={handleCollections}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', fontSize:'1rem'}}>
+                    Collections
+                </Typography>
             </Button>
         </Toolbar>
     </AppBar>
@@ -282,6 +287,9 @@ export default function Generate(){
                 </DialogActions>
             </Dialog>
          </Container>
+    </Box>
+</Container>
+
     )
 }
 

@@ -34,6 +34,7 @@ const features = [
 
 function FeaturesSection() {
   return (
+    
     <Box sx={{ 
       my: 6, 
       py: 6,
@@ -115,14 +116,14 @@ export default function Home() {
   const handleContinue = () => {
     setOpenFreeDialog(false);
     // Redirect to the generate page
-    window.location.href = "/generate"; // Update the path as needed
+    window.location.href = "/generate"; // Redirect to the generate page
   };
 
 
 
   return (
       <ThemeProvider theme={theme}>
-        <Container maxWidth='lg' sx={{ bgcolor: 'background.default' }}>
+       <Box sx={{ color :'white',display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
           <Head>
             <title>Flashcard Creator</title>
             <meta name="description" content="create flashcard from your text" />
@@ -159,8 +160,8 @@ export default function Home() {
             zIndex: 1,
             pl: 4, // Add some padding to the left
           }}>
-            <Typography variant="h2" gutterBottom>Welcome to MemoGenie</Typography>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h2" gutterBottom color={'black'}>Welcome to MemoGenie</Typography>
+            <Typography variant="h6" gutterBottom color={'black'}>
             MemoGenie is your AI-powered companion, turning any topic into personalized flashcards, making mastery effortless and engaging.
             </Typography>
             <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
@@ -188,7 +189,8 @@ export default function Home() {
         <FeaturesSection />
 
 {/* Pricing Section */}
-<Box sx={{ my: 6, textAlign: 'center', backgroundColor: 'purple', py: 6 }}>
+<section id="featuresRef" ref={featuresRef} >
+<Box sx={{ my: 6, textAlign: 'center', backgroundColor: 'purple', py: 6}}>
           <Typography variant="h4" align="center" gutterBottom sx={{ color: 'white' }}>
             Choose Your Plan
           </Typography>
@@ -284,6 +286,7 @@ export default function Home() {
             ))}
           </Grid>
         </Box>
+        </section>
 
 
 
@@ -307,7 +310,7 @@ export default function Home() {
             </Button>
           </DialogActions>
         </Dialog>
-      </Container>
+      </Box>
     </ThemeProvider>
   );
 }
