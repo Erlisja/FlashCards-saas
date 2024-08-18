@@ -19,12 +19,12 @@ export default function Flashcard() {
 
     // Home button
         const handleHome = () => {
-            router.push('/');
+            router.push('./');
         };
         // Back button
     
         const handleBack = () => {
-            router.push('/flashcards');
+            router.push('./flashcards');
         };
     useEffect(() => {
         async function getFlashcard() {

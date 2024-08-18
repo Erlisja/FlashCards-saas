@@ -128,7 +128,7 @@ export default function Generate() {
         await batch.commit();
         handleClose();
         localStorage.setItem('savedCount', (savedCount + 1).toString());
-        router.push('/flashcards');
+        router.push('./flashcards');
     }
 
 
