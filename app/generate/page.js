@@ -11,7 +11,6 @@ import Link from "next/link";
 import dynamic from 'next/dynamic';
 
 
-const FirebaseClientOnly = dynamic(() => import('@/firebase'), { ssr: false });
 
 // Main component for generating flashcards
 export default function Generate() {
@@ -25,27 +24,15 @@ export default function Generate() {
 
     const router = useRouter();
 
-    // // Track generation count using localStorage
-    // const [generationCount, setGenerationCount] = useState(parseInt(localStorage.getItem('generationCount') || '0'));
-
-    // useEffect(() => {
-        
-    //     localStorage.setItem('generationCount', generationCount);
-    // }, [generationCount]);
-
-    const [generationCount, setGenerationCount] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return parseInt(localStorage.getItem('generationCount') || '0');
-        }
-        return 0;
-    });
+    // Track generation count using localStorage
+    const [generationCount, setGenerationCount] = useState(parseInt(localStorage.getItem('generationCount') || '0'));
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('generationCount', generationCount);
-        }
+        
+        localStorage.setItem('generationCount', generationCount);
     }, [generationCount]);
 
+   
     // Function to handle form submission for generating flashcards
     const handleSubmit = async () => {
         if (generationCount >= 3) {
