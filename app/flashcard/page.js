@@ -17,10 +17,17 @@ export default function Flashcard() {
     const search = searchParams.get('id')
     const router = useRouter()
 
-
+    // Home button
+        const handleHome = () => {
+            router.push('/');
+        };
+        // Back button
+    
+        const handleBack = () => {
+            router.push('/flashcards');
+        };
     useEffect(() => {
         async function getFlashcard() {
-            if (!user || !search) return
             const colRef = collection(doc(collection(db, 'users'), user.id), search)
             const docs = await getDocs(colRef);
             const flashcards = []
@@ -33,15 +40,7 @@ export default function Flashcard() {
         getFlashcard()
     }, [user, search])
 
-      // Home button
-      const handleHome = () => {
-        router.push('/');
-    };
-    // Back button
-   
-    const handleBack = () => {
-        router.push('/flashcards');
-    };
+     
 
 
     const handleCardClick = (id) => {
