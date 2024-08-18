@@ -7,8 +7,6 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { collection, doc, writeBatch, getDoc } from "firebase/firestore";
 import { db } from "@/firebase";
-import Link from "next/link";
-import dynamic from 'next/dynamic';
 
 
 
@@ -67,7 +65,7 @@ export default function Generate() {
     }
 
     const handleRedirectToSubscription = () => {
-        router.push('./#pricing');
+        router.push('./');
     };
 
     const handleSubscriptionClose = () => {

@@ -50,7 +50,7 @@ export default function Flashcard() {
         }))
     }
 
-    //if (!isLoaded || !isSignedIn) { return <></> }
+    if (!isLoaded || !isSignedIn) { return <></> }
 
   
     return (
