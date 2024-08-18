@@ -16,6 +16,7 @@ export default function Flashcard() {
 
     const searchParams = useSearchParams()
     const search = searchParams.get('id')
+    const router = useRouter()
 
 
     useEffect(() => {
@@ -46,7 +47,7 @@ export default function Flashcard() {
         router.push('./');
     };
     // Back button
-    const router = useRouter()
+   
     const handleBack = () => {
         router.push('./flashcards');
     };
