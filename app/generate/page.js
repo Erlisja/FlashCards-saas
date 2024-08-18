@@ -7,11 +7,23 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { collection, doc, writeBatch, getDoc } from "firebase/firestore";
 import { db } from "@/firebase";
+import dynamic from 'next/dynamic';
 
 
+
+// // Main component for generating flashcards
+// export default function Generate() {
+//     const { isLoaded, isSignedIn, user } = useUser();
+//     const [flashcards, setFlashcards] = useState([]);
+//     const [flipped, setFlipped] = useState([]);
+//     const [text, setText] = useState("");
+//     const [name, setName] = useState("");
+//     const [open, setOpen] = useState(false);
+//     const [limitReached, setLimitReached] = useState(false);
+//     const [generationCount, setGenerationCount] = useState(0);
 
 // Main component for generating flashcards
-export default function Generate() {
+function Generate() {
     const { isLoaded, isSignedIn, user } = useUser();
     const [flashcards, setFlashcards] = useState([]);
     const [flipped, setFlipped] = useState([]);
@@ -20,7 +32,6 @@ export default function Generate() {
     const [open, setOpen] = useState(false);
     const [limitReached, setLimitReached] = useState(false);
     const [generationCount, setGenerationCount] = useState(0);
-
     const router = useRouter();
 
    
@@ -345,3 +356,6 @@ export default function Generate() {
 
     )
 }
+
+// Export the dynamically imported component
+export default Generate;
