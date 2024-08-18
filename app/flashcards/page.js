@@ -3,12 +3,11 @@
 import { SignOutButton, useUser, useClerk } from "@clerk/nextjs";
 import { AppBar, Container, Toolbar, Button, Typography, Grid, Card, CardActionArea, CardContent, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { collection, doc, writeBatch, getDoc, setDoc, deleteDoc, docs } from "firebase/firestore";
 import { db } from "@/firebase";
 import Image from 'next/image';
-import HighlightOffSharpIcon from '@mui/icons-material/HighlightOffSharp';
+
 import RemoveCircleTwoToneIcon from '@mui/icons-material/RemoveCircleTwoTone';
 
 export default function Flashcards() {

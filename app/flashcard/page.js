@@ -7,6 +7,10 @@ import { db } from "@/firebase";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
+// Dynamically import Firebase functions
+const { collection, doc, getDocs } = dynamic(() => import('firebase/firestore'), { ssr: false });
+const { db } = dynamic(() => import('@/firebase'), { ssr: false });
+
 export default function Flashcard() {
 
     const { isLoaded, isSignedIn, user } = useUser()
