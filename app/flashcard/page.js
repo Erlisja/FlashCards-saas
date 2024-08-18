@@ -33,17 +33,8 @@ export default function Flashcard() {
         getFlashcard()
     }, [user, search])
 
-    const handleCardClick = (id) => {
-        setFlipped((prev) => ({
-            ...prev,
-            [id]: !prev[id]
-        }))
-    }
-
-    if (!isLoaded || !isSignedIn) { return <></> }
-    
-    // Home button
-    const handleHome = () => {
+      // Home button
+      const handleHome = () => {
         router.push('/');
     };
     // Back button
@@ -52,6 +43,17 @@ export default function Flashcard() {
         router.push('/flashcards');
     };
 
+
+    const handleCardClick = (id) => {
+        setFlipped((prev) => ({
+            ...prev,
+            [id]: !prev[id]
+        }))
+    }
+
+    //if (!isLoaded || !isSignedIn) { return <></> }
+
+  
     return (
         <Container maxWidth='md' sx={{ pt: 8 }}>
             <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'White' }}>
