@@ -25,10 +25,14 @@ export default function Generate() {
     // Track generation count using localStorage
     const [generationCount, setGenerationCount] = useState(parseInt(localStorage.getItem('generationCount') || '0'));
 
+  
     useEffect(() => {
-        
-        localStorage.setItem('generationCount', generationCount);
-    }, [generationCount]);
+        if (typeof window !== 'undefined') {
+            const storedCount = parseInt(localStorage.getItem('generationCount') || '0');
+            setGenerationCount(storedCount);
+        }
+    }, []);
+    
 
    
     // Function to handle form submission for generating flashcards
@@ -38,7 +42,7 @@ export default function Generate() {
             return;
         }
 
-        fetch('api/generate', {
+        fetch('/api/generate', {
             method: 'POST', // HTTP method
             body: text, // Request body containing the input text
         })
