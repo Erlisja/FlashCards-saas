@@ -1,6 +1,5 @@
 'use client'
 import { AppBar, Container, Grid, Button, Box, Card, Typography, Toolbar, CardActionArea, CardContent } from "@mui/material";
-import Link from "next/link";
 import { useUser } from "@clerk/nextjs"
 import { useEffect, useState } from "react"
 import { collection, doc, writeBatch, getDocs } from "firebase/firestore";
