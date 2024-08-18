@@ -19,11 +19,11 @@ export default function Generate() {
     const [name, setName] = useState("");
     const [open, setOpen] = useState(false);
     const [limitReached, setLimitReached] = useState(false);
+    const [generationCount, setGenerationCount] = useState(0);
 
     const router = useRouter();
 
-    // Track generation count using localStorage
-    const [generationCount, setGenerationCount] = useState(parseInt(localStorage.getItem('generationCount') || '0'));
+   
 
   
     useEffect(() => {
@@ -49,8 +49,14 @@ export default function Generate() {
             .then((res) => res.json()) // Parse the response as JSON
             .then((data) => setFlashcards(data)); // Update the flashcards state with the response data
 
-        setGenerationCount(prevCount => prevCount + 1);
-    }
+            setGenerationCount(prevCount => {
+                const newCount = prevCount + 1;
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('generationCount', newCount);
+                }
+                return newCount;
+            });
+        }
 
     // Function to handle the click event on a flashcard
     const handleCardClick = (id) => {
