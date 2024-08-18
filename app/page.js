@@ -5,6 +5,7 @@ import Head from "next/head"; // Correctly import Head from next/head
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Box, AppBar, Button, Container, Toolbar, Typography, Grid, Dialog, DialogActions, createTheme, ThemeProvider, Card, CardActions, CardContent, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Create a theme instance.
 const theme = createTheme({
@@ -73,6 +74,7 @@ export default function Home() {
 
   const featuresRef = useRef(null);
   const [openFreeDialog, setOpenFreeDialog] = useState(false);
+  const router = useRouter();
 
   // Handle form submission. 
   const handleSubmit = async (plan) => {
@@ -126,7 +128,9 @@ export default function Home() {
   const handleContinue = () => {
     setOpenFreeDialog(false);
     // Redirect to the generate page
-    window.location.href = "/generate"; // Redirect to the generate page
+    router.push('./generate');
+
+   
   };
 
 
