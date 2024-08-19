@@ -2,14 +2,11 @@
 import { AppBar, Container, Grid, Button, Box, Card, Typography, Toolbar, CardActionArea, CardContent } from "@mui/material";
 import { useUser } from "@clerk/nextjs"
 import { useEffect, useState } from "react"
-import { collection, doc, writeBatch, getDocs } from "firebase/firestore";
-import { db } from "@/firebase";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { collection, doc, getDocs } from 'firebase/firestore'
+import { db } from '@/firebase'
 
-// Dynamically import Firebase functions
-const { collection, doc, getDocs } = dynamic(() => import('firebase/firestore'), { ssr: false });
-const { db } = dynamic(() => import('@/firebase'), { ssr: false });
 
 export default function Flashcard() {
 
@@ -20,7 +17,7 @@ export default function Flashcard() {
     const searchParams = useSearchParams()
     const search = searchParams.get('id')
     const router = useRouter()
-
+    
     // Home button
         const handleHome = () => {
             router.push('./');
